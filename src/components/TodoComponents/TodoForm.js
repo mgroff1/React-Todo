@@ -1,38 +1,42 @@
-import React, { Component } from 'react'
-import uuid from "uuid";
+import React, { Component } from 'react';
 
+class AddTodo extends Component {
+    state = {
+        defaultValue: "",
+        value: this.props.addTodoValue
+    }
 
-class TodoForm extends Component {
+    handleChange = (e) => {
+        //Updating local component state
+        this.setState({
+            value: e.target.value
+        });
+    }
 
-    constructor(props) {
-        super(props)
+    clearInput = () => {
+        //Clear existing value in input
+        document.getElementById("todoValue").value = "";
 
-       this.input=React.createRef()
-       this.state={
-           list:[],
-          }
+        //Updating local component state
+        this.setState({value:""});
+    }
+
+    addTodo = () => {
+        //Call method reference in Todos component using props
+        this.props.fooAddTodo(this.state.value);
+        this.clearInput();
     }
 
     render() {
         return (
-            <div className="main-container">
-                <h1>Todo App...</h1>
-                <hr/>
-                <div className="container">
-                    <input type="text" placeholder="AddTask..." ref={this.input}></input>
-                        <button onClick={this.addTask} className="button" >Add</button>
-                            <ol>
-                                {
-                                    this.state.list.map((item,index)=>
-                                    {
-                                        return(<li key={item.id}> {item.value}
-                                        <button className="button" type="button" value="delete" data-key={index} onClick={this.deleteItem}>Delete</button></li>)
-                                    })
-                                }
-                            </ol>
+            <div className="input-group mb-3">
+                <input type="text" className="form-control" id="todoValue" placeholder="ToDo" onChange={this.handleChange} />
+                <div className="input-group-append">
+                    <button onClick={this.addTodo} className="btn btn-outline-secondary" type="button" id="button-addon2">Add New ToDo</button>
                 </div>
-
             </div>
-        )
+        );
     }
-  }
+}
+
+export default AddTodo;

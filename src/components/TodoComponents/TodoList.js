@@ -1,24 +1,91 @@
-// your components will all go in this `component` directory.
-// feel free to change this component.js into TodoList.js
+import React, { Component } from 'react';
+import Todo from './Todo';
+import AddTodo from './TodoForm';
+import uuid from 'uuid';
+class Todos extends Component {
 
-export const AddTask =()=>{
- const Items={
-        id:uuid.v4(),
-        value:this.input.current.value,
-        Date: new Date().toUTCString()
-    };
+    //Component state with default values
+    state = {
+        addTodoValue: "",
+        todos: [
+            {
+                id: 1,
+                value: "do something else",
+                isDone: false
+            },
+            {
+                id: 2,
+                value: "stub your toe",
+                isDone: true
+            },
+            {
+                id: 3,
+                value: "smash finger in car door",
+                isDone: false
+            }
+        ]
+    }
 
-    if(localStorage.getItem('list')==null){
-        const list=[]
-        list.push(Items);
-        localStorage.setItem("list",JSON.stringify(list))
+    //Local helper method to get date
+    getTime() {
+        let d = new Date();
+        var n = d.getTime();
+        return n;
     }
-    else{
-        const list=JSON.parse(localStorage.getItem('list'))
-        list.push(Items)
-        localStorage.setItem("list",JSON.stringify(list))
+
+    //method called from Todo component
+    handleDelete = todo => {
+        const todos = this.state.todos.filter((t) => {
+            return t.id !== todo
+        });
+        this.setState({ todos });
     }
-    this.setState({
-        list:JSON.parse(localStorage.getItem('list'))
-    });
+
+    handleDone = todo => {
+        const todos = [...this.state.todos];
+        todos.map((t) => {
+            if (t.id === todo.id) {
+                t.isDone = !t.isDone;
+            }
+            return t;
+        });
+        this.setState({todos});
+    }
+
+    addNewTodo = value => {
+        if (value) {
+            const todos = [...this.state.todos];
+            todos.push(
+                {
+                    id: this.getTime(),
+                    value: value,
+                    isDone: false
+                }
+            );
+            this.setState({ addTodoValue: "", todos })
+        } else {
+            console.log("Please Add Todo Text");
+        }
+    }
+
+    render() {
+        return (
+            <table className="table">
+                <tbody>
+                    {this.state.todos.map((todo, index) => (
+                        <tr key={todo.id}>
+                            <Todo index={index+1} todo={todo} fooDelete={this.handleDelete} fooDoneDone={this.handleDone} />
+                        </tr>
+                    ))}
+                    <tr>
+                        <td colSpan="4" className="text-center">
+                            <AddTodo fooAddTodo={this.addNewTodo} addTodoValue={this.state.addTodoValue} />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        );
+    }
 }
+
+export default Todos;
