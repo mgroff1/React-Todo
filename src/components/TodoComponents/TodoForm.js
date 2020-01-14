@@ -22,7 +22,7 @@ class AddTodo extends Component {
     }
 
     addTodo = () => {
-        //Call method reference in Todos component using props
+
         this.props.fooAddTodo(this.state.value);
         this.clearInput();
     }

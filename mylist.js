@@ -1,182 +1,100 @@
-console.clear();
-
-const Title = ({todoCount}) => {
-  return (
-    <div>
-       <div>
-          <h1>to-do ({todoCount})</h1>
-       </div>
-    </div>
-  );
-}
-
-const TodoForm = ({addTodo}) => {
-  // Input Tracker
-  let input;
-  // Return JSX
-  return (
-    <form onSubmit={(e) => {
-        e.preventDefault();
-        addTodo(input.value);
-        input.value = '';
-      }}>
-      <input className="form-control col-md-12" ref={node => {
-        input = node;
-      }} />
-      <br />
-    </form>
-  );
-};
-
-const Todo = ({todo, remove}) => {
-  // Each Todo
-  return (<a href="#" className="list-group-item" onClick={() => {remove(todo.id)}}>{todo.text}</a>);
-}
-
-const TodoList = ({todos, remove}) => {
-  // Map through the todos
-  const todoNode = todos.map((todo) => {
-    return (<Todo todo={todo} key={todo.id} remove={remove}/>)
-  });
-  return (<div className="list-group" style={{marginTop:'30px'}}>{todoNode}</div>);
-}
-
-// Contaner Component
-// Todo Id
-window.id = 0;
-class TodoApp extends React.Component{
-  constructor(props){
-    // Pass props to parent class
-    super(props);
-    // Set initial state
-    this.state = {
-      data: []
-    }
-    this.apiUrl = '//57b1924b46b57d1100a3c3f8.mockapi.io/api/todos'
-  }
-  // Lifecycle method
-  componentDidMount(){
-    // Make HTTP reques with Axios
-    axios.get(this.apiUrl)
-      .then((res) => {
-        // Set state with result
-        this.setState({data:res.data});
-      });
-  }
-  // Add todo handler
-  addTodo(val){
-    // Assemble data
-    const todo = {text: val}
-    // Update data
-    axios.post(this.apiUrl, todo)
-       .then((res) => {
-          this.state.data.push(res.data);
-          this.setState({data: this.state.data});
-       });
-  }
-  // Handle remove
-  handleRemove(id){
-    // Filter all todos except the one to be removed
-    const remainder = this.state.data.filter((todo) => {
-      if(todo.id !== id) return todo;
-    });
-    // Update state with filter
-    axios.delete(this.apiUrl+'/'+id)
-      .then((res) => {
-        this.setState({data: remainder});
-      })
-  }
-
-  render(){
-    // Render JSX
-    return (
-      <div>
-        <Title todoCount={this.state.data.length}/>
-        <TodoForm addTodo={this.addTodo.bind(this)}/>
-        <TodoList
-          todos={this.state.data}
-          remove={this.handleRemove.bind(this)}
-        />
-      </div>
-    );
-  }
-}
-ReactDOM.render(<TodoApp />, document.getElementById('container'));
 
 
 
-import React from 'react';
-import TodoList from './components/TodoComponents/TodoList';
-import TodoForm from './components/TodoComponents/TodoForm';
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      todos: [
-        {
-          task: 'Organize Garage',
-          id: 1528817077286,
-          completed: false
-        },
-        {
-          task: 'Bake Cookies',
-          id: 1528817084358,
-          completed: false
-        }
-      ],
-      todo: ''
-    };
-  }
-  // you will need a place to store your state in this component.
-  // design `App` to be the parent component of your application.
-  // this component is going to take care of state, and any change handlers you need to work with your state
-  addTodo = e => {
-    e.preventDefault();
-    const newTodo = { task: this.state.todo, completed: false, id: Date.now() };
-    this.setState({
-      todos: [...this.state.todos, newTodo],
-      todo: ''
-    });
-  };
 
-  changeTodo = e => this.setState({ [e.target.name]: e.target.value });
 
-  toggleTodoComplete = id => {
-    let todos = this.state.todos.slice();
-    todos = todos.map(todo => {
-      if (todo.id === id) {
-        todo.completed = !todo.completed;
-        return todo;
-      } else {
-        return todo;
-      }
-    });
-    this.setState({ todos });
-  };
 
-  clearCompletedTodos = e => {
-    e.preventDefault();
-    let todos = this.state.todos.filter(todo => !todo.completed);
-    this.setState({ todos });
-  };
 
-  render() {
-    return (
-      <div>
-        <TodoList
-          handleToggleComplete={this.toggleTodoComplete}
-          todos={this.state.todos}
-        />
-        <TodoForm
-          value={this.state.todo}
-          handleTodoChange={this.changeTodo}
-          handleAddTodo={this.addTodo}
-          handleClearTodos={this.clearCompletedTodos}
-        />
-      </div>
-    );
-  }
-}
 
-export default App;
+
+
+// import React, { Component } from 'react'
+// import uuid from "uuid";
+//
+//
+//
+// class Todo extends Component {
+//
+//     constructor(props) {
+//         super(props)
+//
+//        this.input=React.createRef()
+//        this.state={
+//            list:[],
+//           }
+//     }
+//
+//     addTask=()=>{
+//
+//     const Items={
+//             id:uuid.v4(),
+//             value:this.input.current.value,
+//             Date: new Date().toUTCString()
+//         };
+//
+//         if(localStorage.getItem('list')==null){
+//             const list=[]
+//             list.push(Items);
+//             localStorage.setItem("list",JSON.stringify(list))
+//         }
+//         else{
+//             const list=JSON.parse(localStorage.getItem('list'))
+//             list.push(Items)
+//             localStorage.setItem("list",JSON.stringify(list))
+//         }
+//         this.setState({
+//             list:JSON.parse(localStorage.getItem('list'))
+//         });
+//     }
+//
+//     componentDidMount() {
+//         const list = window.localStorage.getItem('list');
+//         const parsedList = JSON.parse(list);
+//         if(list == null){
+//             return false
+//         }
+//         else{
+//             this.setState({
+//                 list: parsedList,
+//             })
+//             console.log(this.state.list);
+//         }
+//     }
+//
+//     deleteItem=(event)=> {
+//
+//         let index = event.target.getAttribute('data-key')
+//         let listValue=JSON.parse(localStorage.getItem('list'));
+//         listValue.splice(index,1)
+//         this.setState({list:listValue});
+//         localStorage.setItem('list',JSON.stringify(listValue))
+//     }
+//
+//
+//
+//     render() {
+//         return (
+//             <div className="main-container">
+//                 <h1>Todo App...</h1>
+//                 <hr/>
+//                 <div className="container">
+//                     <input type="text" placeholder="AddTask..." ref={this.input}></input>
+//                         <button onClick={this.addTask} className="button" >Add</button>
+//                             <ol>
+//                                 {
+//                                     this.state.list.map((item,index)=>
+//                                     {
+//                                         return(<li key={item.id}> {item.value}
+//                                         <button className="button" type="button" value="delete" data-key={index} onClick={this.deleteItem}>Delete</button></li>)
+//                                     })
+//                                 }
+//                             </ol>
+//                 </div>
+//
+//             </div>
+//         )
+//     }
+// }
+//
+// export default Todo

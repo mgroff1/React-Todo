@@ -4,7 +4,6 @@ import AddTodo from './TodoForm';
 import uuid from 'uuid';
 class Todos extends Component {
 
-    //Component state with default values
     state = {
         addTodoValue: "",
         todos: [
@@ -26,14 +25,14 @@ class Todos extends Component {
         ]
     }
 
-    //Local helper method to get date
+
     getTime() {
         let d = new Date();
         var n = d.getTime();
         return n;
     }
 
-    //method called from Todo component
+
     handleDelete = todo => {
         const todos = this.state.todos.filter((t) => {
             return t.id !== todo
