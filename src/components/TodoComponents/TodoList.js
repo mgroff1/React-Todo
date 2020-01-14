@@ -69,7 +69,7 @@ class Todos extends Component {
 
     render() {
         return (
-            <table className="table">
+            <table id="table" className="table">
                 <tbody>
                     {this.state.todos.map((todo, index) => (
                         <tr key={todo.id}>

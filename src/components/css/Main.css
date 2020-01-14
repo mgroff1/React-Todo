@@ -6,3 +6,34 @@ h1{
     border-style: solid;
     margin:auto;
 }
+
+#root .container{
+  display:block;
+  padding:40px;
+  margin-top:25px;
+  background:rgba(95,95,95,1);
+  border-radius:5px;
+  box-shadow:1px 1px 5px 1px black;
+}
+
+#table.table{
+  display:flex;
+  width:80vw;
+  margin:20px;
+  color:white;
+
+  justify-content: space-between;
+}
+
+
+
+.section{
+  /* margin:0 20px 0 25px; */
+  width:80vw;
+  display:flex;
+  justify-content: space-between;
+}
+
+.section > td{
+  width:24%;
+}
